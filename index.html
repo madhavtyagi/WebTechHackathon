@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuseoSpace - Virtual Art Exhibition</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- PAGE 1: EXHIBITION LOBBY -->
+    <section id="page-lobby" class="page">
+        <div class="lobby-container">
+            <!-- Cursor spotlight -->
+            <div id="spotlight" class="spotlight"></div>
+            
+            <!-- Frosted glass overlay with drifting silhouettes -->
+            <div class="lobby-background">
+                <div class="silhouette"></div>
+                <div class="silhouette" style="animation-delay: 2s;"></div>
+                <div class="silhouette" style="animation-delay: 4s;"></div>
+            </div>
+            
+            <div class="lobby-content">
+                <h1 class="lobby-title">Where art meets emotion...</h1>
+                <p class="lobby-subtitle">Welcome to MuseoSpace</p>
+                
+                <button class="start-button" onclick="startTour()">
+                    <span class="button-pulse"></span>
+                    Start The Tour
+                </button>
+                
+                <!-- Ambient mode toggle -->
+                <button class="ambient-toggle" id="ambientToggle" onclick="toggleAmbient()">
+                    <span class="icon">🔊</span>
+                </button>
+            </div>
+        </div>
+        <audio id="ambientMusic" loop style="display: none;">
+            <source src="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" type="audio/wav">
+        </audio>
+    </section>
+
+    <!-- PAGE 2: GALLERY WALKTHROUGH -->
+    <section id="page-gallery" class="page">
+        <div class="gallery-container">
+            <!-- Room 1: Renaissance Hall -->
+            <div class="gallery-room room-1">
+                <div class="room-header">
+                    <h2>The Renaissance Hall</h2>
+                    <p class="room-subtitle">Rebirth of Detail</p>
+                </div>
+                <div class="gallery-grid" id="room1-grid"></div>
+            </div>
+
+            <!-- Room 2: Abstract Explosion -->
+            <div class="gallery-room room-2">
+                <div class="room-header">
+                    <h2>Abstract Explosion</h2>
+                    <p class="room-subtitle">Colors Without Rules</p>
+                </div>
+                <div class="gallery-grid" id="room2-grid"></div>
+            </div>
+
+            <!-- Room 3: Modern Minimalism -->
+            <div class="gallery-room room-3">
+                <div class="room-header">
+                    <h2>Modern Minimalism</h2>
+                    <p class="room-subtitle">Less is More</p>
+                </div>
+                <div class="gallery-grid" id="room3-grid"></div>
+            </div>
+
+            <!-- Room 4: Digital Future -->
+            <div class="gallery-room room-4">
+                <div class="room-header">
+                    <h2>Digital Future</h2>
+                    <p class="room-subtitle">Neon & Motion</p>
+                </div>
+                <div class="gallery-grid" id="room4-grid"></div>
+            </div>
+
+            <!-- Added navigation button to go to feedback page -->
+            <div class="gallery-footer">
+                <button class="next-page-button" onclick="goToPage('feedback')">
+                    Share Your Experience ➜
+                </button>
+            </div>
+
+            <!-- Mini map -->
+            <div class="mini-map">
+                <div class="mini-map-item active" data-room="1">Renaissance</div>
+                <div class="mini-map-item" data-room="2">Abstract</div>
+                <div class="mini-map-item" data-room="3">Modern</div>
+                <div class="mini-map-item" data-room="4">Digital</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 3: ARTWORK FOCUS & DETAILS -->
+    <section id="page-artwork" class="page">
+        <div class="artwork-container">
+            <!-- Glassmorphism modal -->
+            <div class="artwork-modal">
+                <button class="close-button" onclick="closeArtwork()">&times;</button>
+                
+                <div class="artwork-hero">
+                    <img id="artworkImage" src="./public/placeholder.svg?height=500&width=500&query=art+gallery" alt="Artwork">
+                    <div class="artwork-zoom-hint">
+                        <span class="magnifying-glass">🔍</span>
+                    </div>
+                </div>
+
+                <div class="artwork-content">
+                    <div class="artwork-metadata">
+                        <h2 id="artworkTitle"></h2>
+                        <p class="artist" id="artworkArtist"></p>
+                        <div class="metadata-grid">
+                            <div class="metadata-item">
+                                <span class="label">Year</span>
+                                <span id="artworkYear"></span>
+                            </div>
+                            <div class="metadata-item">
+                                <span class="label">Medium</span>
+                                <span id="artworkMedium"></span>
+                            </div>
+                        </div>
+                        <p class="curator-notes" id="curatorNotes"></p>
+                    </div>
+
+                    <button class="favorite-button" id="favoriteButton" onclick="toggleFavorite()">
+                        <span class="heart">♡</span> Add to Favorites
+                    </button>
+
+                    <!-- Related Artworks Carousel -->
+                    <div class="carousel">
+                        <h3>Related Artworks</h3>
+                        <div class="carousel-track" id="carouselTrack"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 4: VISITOR REFLECTION & FEEDBACK -->
+    <section id="page-feedback" class="page">
+        <div class="feedback-container">
+            <div class="feedback-content">
+                <h2>Art Lives Through You</h2>
+                <p class="feedback-subtitle">Share your museum experience</p>
+
+                <div class="feedback-wrapper">
+                    <!-- Form -->
+                    <form class="feedback-form" id="feedbackForm" onsubmit="submitFeedback(event)">
+                        <div class="form-group">
+                            <label for="visitorName">Your Name</label>
+                            <input type="text" id="visitorName" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="visitorEmail">Email Address</label>
+                            <input type="email" id="visitorEmail" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="favoriteArtwork">Your Favorite Artwork</label>
+                            <select id="favoriteArtwork" name="artwork">
+                                <option value="">Select from your favorites...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="visitorMessage">Your Message</label>
+                            <textarea id="visitorMessage" name="message" rows="5" placeholder="Share your thoughts about the exhibition..."></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-button">Submit Feedback</button>
+                    </form>
+
+                    <!-- Live Preview -->
+                    <div class="live-preview">
+                        <h3>Preview</h3>
+                        <div class="preview-card">
+                            <p class="preview-name" id="previewName">Your Name</p>
+                            <p class="preview-message" id="previewMessage">Your thoughts will appear here...</p>
+                            <p class="preview-email" id="previewEmail">email@example.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODALS -->
+    <!-- Validation Error Modal -->
+    <div id="validationModal" class="modal">
+        <div class="modal-content">
+            <h3 id="validationTitle">Validation Error</h3>
+            <p id="validationMessage">Please fill in all fields correctly.</p>
+            <button onclick="closeModal('validationModal')" class="modal-button">Understood</button>
+        </div>
+    </div>
+
+    <!-- Thank You Modal -->
+    <div id="thankYouModal" class="modal">
+        <div class="modal-content thank-you-content">
+            <div class="confetti-container" id="confettiContainer"></div>
+            <h2>Thank You for Visiting MuseoSpace</h2>
+            <p>Your thoughts have been added to our guestbook.</p>
+            <button onclick="restartTour()" class="restart-button">Restart Tour</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
